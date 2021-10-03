@@ -2,11 +2,11 @@
 
 <span><i>"If it is a search engine, then it can be parsed"</i> - some random guy</span>
 
-![Demo](assets/animate.gif)
+![Demo](https://github.com/bisoncorps/search-engine-parser/raw/master/assets/animate.gif)
 
-[![Python 3.5|3.6|3.7|3.8](https://img.shields.io/badge/python-3.5%7C3.6%7C3.7%7C3.8-blue)](https://www.python.org/downloads/)
-![PyPI version](https://img.shields.io/pypi/v/search-engine-parser)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/search-engine-parser)
+[![Python 3.6|3.7|3.8|3.9](https://img.shields.io/badge/python-3.5%7C3.6%7C3.7%7C3.8-blue)](https://www.python.org/downloads/)
+[![PyPI version](https://img.shields.io/pypi/v/search-engine-parser)](https://pypi.org/project/search-engine-parser/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/search-engine-parser)](https://pypi.org/project/search-engine-parser/)
 [![Build Status](https://travis-ci.com/bisoncorps/search-engine-parser.svg?branch=master)](https://travis-ci.com/bisoncorps/search-engine-parser)
 [![Documentation Status](https://readthedocs.org/projects/search-engine-parser/badge/?version=latest)](https://search-engine-parser.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -25,6 +25,7 @@ View all supported engines [here.](https://github.com/bisoncorps/search-engine-p
   - [Usage](#usage)
     - [Code](#code)
     - [Command line](#command-line)
+  - [FAQ](docs/faq.md)
   - [Code of Conduct](#code-of-conduct)
   - [Contribution](#contribution)
   - [License (MIT)](#license-mit)
@@ -39,7 +40,7 @@ Popular search engines supported include:
 - Baidu
 - YouTube
 
-View all supported engines [here.](https://github.com/bisoncorps/search-engine-parser/blob/master/docs/supported_engines.md)
+View all supported engines [here.](docs/supported_engines.md)
 
 ## Installation
 Install from PyPi:
@@ -134,7 +135,7 @@ If you need results in a specific language you can pass the 'hl' keyword and the
 ```
 
 #### Cache
-The results are automatically cached for engine searches. You can either bypass the cache by adding `cache=False` to the `search` or `async_search` method or clear the engine's cache:
+The results are automatically cached for engine searches. You can either bypass the cache by adding `cache=False` to the `search` or `async_search` method or clear the engine's cache
 ```python
     from search_engine_parser.core.engines.github import Search as GitHub
     github = GitHub()
@@ -146,6 +147,18 @@ The results are automatically cached for engine searches. You can either bypass 
     github.clear_cache()
     github.search("search-engine-parser")
 ```
+
+#### Proxy
+Adding a proxy entails sending details to the search function
+```python
+    from search_engine_parser.core.engines.github import Search as GitHub
+    github = GitHub()
+    github.search("search-engine-parser",
+        # http proxies supported only
+        proxy='http://123.12.1.0',
+        proxy_auth=('username', 'password'))
+```
+
 
 #### Async
 search-engine-parser supports `async`:
@@ -172,7 +185,7 @@ It can be iterated like a normal list to return individual `SearchItem`s.
 search-engine-parser comes with a CLI tool known as `pysearch`. You can use it as such:
 
 ```bash
-pysearch --engine bing search --query "Preaching to the choir" --type descriptions
+pysearch --engine bing  --type descriptions "Preaching to the choir"
 ```
 
 Result:
@@ -181,61 +194,50 @@ Result:
 'Preaching to the choir' originated in the USA in the 1970s. It is a variant of the earlier 'preaching to the converted', which dates from England in the late 1800s and has the same meaning. Origin - the full story 'Preaching to the choir' (also sometimes spelled quire) is of US origin.
 ```
 
-![Demo](assets/example.gif)
-
-There is a needed argument for the CLI i.e `-e Engine` followed by either of two subcommands in the CLI i.e `search` and `summary`
+![Demo](https://github.com/bisoncorps/search-engine-parser/raw/master/assets/example.gif)
 
 ```bash
-
-usage: pysearch [-h] [-u URL] [-e ENGINE] {search,summary} ...
+usage: pysearch [-h] [-V] [-e ENGINE] [--show-summary] [-u URL] [-p PAGE]
+                [-t TYPE] [-cc] [-r RANK] [--proxy PROXY]
+                [--proxy-user PROXY_USER] [--proxy-password PROXY_PASSWORD]
+                query
 
 SearchEngineParser
 
 positional arguments:
-  {search,summary}      help for subcommands
-    search              search help
-    summary             summary help
+  query                 Query string to search engine for
 
 optional arguments:
   -h, --help            show this help message and exit
-  -u URL, --url URL     A custom link to use as base url for search e.g
-                        google.de
+  -V, --version         show program's version number and exit
   -e ENGINE, --engine ENGINE
                         Engine to use for parsing the query e.g google, yahoo,
-                        bing, duckduckgo (default: google)
-```
-
-`summary` returns the summary of the specified search engine:
-
-```bash
-pysearch --engine google summary
-```
-
-Full arguments for the `search` subcommand shown below
-
-```bash
-
-usage: pysearch search [-h] -q QUERY [-p PAGE] [-t TYPE] [-r RANK]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -q QUERY, --query QUERY
-                        Query string to search engine for
+                        bing,duckduckgo (default: google)
+  --show-summary        Shows the summary of an engine
+  -u URL, --url URL     A custom link to use as base url for search e.g
+                        google.de
   -p PAGE, --page PAGE  Page of the result to return details for (default: 1)
   -t TYPE, --type TYPE  Type of detail to return i.e full, links, desciptions
                         or titles (default: full)
+  -cc, --clear-cache    Clear cache of engine before searching
   -r RANK, --rank RANK  ID of Detail to return e.g 5 (default: 0)
-  -cc, --clear_cache    Clear cache of engine before searching
+  --proxy PROXY         Proxy address to make use of
+  --proxy-user PROXY_USER
+                        Proxy user to make use of
+  --proxy-password PROXY_PASSWORD
+                        Proxy password to make use of
 ```
 
+
+
 ## Code of Conduct
-Make sure to adhere to the [code of conduct](https://github.com/bisoncorps/search-engine-parser/blob/master/CODE_OF_CONDUCT.md) at all times.
+Make sure to adhere to the [code of conduct](CODE_OF_CONDUCT.md) at all times.
 
 ## Contribution
-Before making any contributions, please read the [contribution guide](https://github.com/bisoncorps/search-engine-parser/blob/master/CONTRIBUTING.md).
+Before making any contributions, please read the [contribution guide](CONTRIBUTING.md).
 
 ## License (MIT)
-This project is licensed under the [MIT 2.0 License](https://github.com/bisoncorps/search-engine-parser/blob/master/LICENSE) which allows very broad use for both academic and commercial purposes.
+This project is licensed under the [MIT 2.0 License](LICENSE) which allows very broad use for both academic and commercial purposes.
 
 ## Contributors ✨
 
@@ -246,31 +248,33 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Rexogamer"><img src="https://avatars0.githubusercontent.com/u/42586271?v=4" width="100px;" alt=""/><br /><sub><b>Ed Luff</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Rexogamer" title="Code">💻</a></td>
-    <td align="center"><a href="http://diretnandomnan.webnode.com"><img src="https://avatars3.githubusercontent.com/u/23453888?v=4" width="100px;" alt=""/><br /><sub><b>Diretnan Domnan</b></sub></a><br /><a href="#infra-deven96" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=deven96" title="Tests">⚠️</a> <a href="#tool-deven96" title="Tools">🔧</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=deven96" title="Code">💻</a></td>
-    <td align="center"><a href="http://mensaah.github.io"><img src="https://avatars3.githubusercontent.com/u/24734308?v=4" width="100px;" alt=""/><br /><sub><b>MeNsaaH</b></sub></a><br /><a href="#infra-MeNsaaH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=MeNsaaH" title="Tests">⚠️</a> <a href="#tool-MeNsaaH" title="Tools">🔧</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=MeNsaaH" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/PalAditya"><img src="https://avatars2.githubusercontent.com/u/25523604?v=4" width="100px;" alt=""/><br /><sub><b>Aditya Pal</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Tests">⚠️</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://energized.pro"><img src="https://avatars1.githubusercontent.com/u/27774996?v=4" width="100px;" alt=""/><br /><sub><b>Avinash Reddy</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3AAvinashReddy3108" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/Iamdavidonuh"><img src="https://avatars3.githubusercontent.com/u/37768509?v=4" width="100px;" alt=""/><br /><sub><b>David Onuh</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Iamdavidonuh" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Iamdavidonuh" title="Tests">⚠️</a></td>
-    <td align="center"><a href="http://simakis.me"><img src="https://avatars2.githubusercontent.com/u/8322266?v=4" width="100px;" alt=""/><br /><sub><b>Panagiotis Simakis</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=sp1thas" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=sp1thas" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/Rexogamer"><img src="https://avatars0.githubusercontent.com/u/42586271?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ed Luff</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Rexogamer" title="Code">💻</a></td>
+    <td align="center"><a href="http://diretnandomnan.webnode.com"><img src="https://avatars3.githubusercontent.com/u/23453888?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Diretnan Domnan</b></sub></a><br /><a href="#infra-deven96" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=deven96" title="Tests">⚠️</a> <a href="#tool-deven96" title="Tools">🔧</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=deven96" title="Code">💻</a></td>
+    <td align="center"><a href="http://mensaah.github.io"><img src="https://avatars3.githubusercontent.com/u/24734308?v=4?s=100" width="100px;" alt=""/><br /><sub><b>MeNsaaH</b></sub></a><br /><a href="#infra-MeNsaaH" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=MeNsaaH" title="Tests">⚠️</a> <a href="#tool-MeNsaaH" title="Tools">🔧</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=MeNsaaH" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/PalAditya"><img src="https://avatars2.githubusercontent.com/u/25523604?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aditya Pal</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Tests">⚠️</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=PalAditya" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://energized.pro"><img src="https://avatars1.githubusercontent.com/u/27774996?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Avinash Reddy</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3AAvinashReddy3108" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/Iamdavidonuh"><img src="https://avatars3.githubusercontent.com/u/37768509?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Onuh</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Iamdavidonuh" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=Iamdavidonuh" title="Tests">⚠️</a></td>
+    <td align="center"><a href="http://simakis.me"><img src="https://avatars2.githubusercontent.com/u/8322266?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Panagiotis Simakis</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=sp1thas" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=sp1thas" title="Tests">⚠️</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/reiarthur"><img src="https://avatars2.githubusercontent.com/u/20190646?v=4" width="100px;" alt=""/><br /><sub><b>reiarthur</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=reiarthur" title="Code">💻</a></td>
-    <td align="center"><a href="http://ashokkumarta.blogspot.com/"><img src="https://avatars0.githubusercontent.com/u/5450267?v=4" width="100px;" alt=""/><br /><sub><b>Ashokkumar TA</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=ashokkumarta" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ateuber"><img src="https://avatars2.githubusercontent.com/u/44349054?v=4" width="100px;" alt=""/><br /><sub><b>Andreas Teuber</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=ateuber" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/mi096684"><img src="https://avatars3.githubusercontent.com/u/22032932?v=4" width="100px;" alt=""/><br /><sub><b>mi096684</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Ami096684" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/devajithvs"><img src="https://avatars1.githubusercontent.com/u/29475282?v=4" width="100px;" alt=""/><br /><sub><b>devajithvs</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=devajithvs" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/zakaryan2004"><img src="https://avatars3.githubusercontent.com/u/29994884?v=4" width="100px;" alt=""/><br /><sub><b>Geg Zakaryan</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=zakaryan2004" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Azakaryan2004" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://www.hakanbogan.com"><img src="https://avatars1.githubusercontent.com/u/24498747?v=4" width="100px;" alt=""/><br /><sub><b>Hakan Boğan</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Aredrussianarmy" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/reiarthur"><img src="https://avatars2.githubusercontent.com/u/20190646?v=4?s=100" width="100px;" alt=""/><br /><sub><b>reiarthur</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=reiarthur" title="Code">💻</a></td>
+    <td align="center"><a href="http://ashokkumarta.blogspot.com/"><img src="https://avatars0.githubusercontent.com/u/5450267?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashokkumar TA</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=ashokkumarta" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ateuber"><img src="https://avatars2.githubusercontent.com/u/44349054?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andreas Teuber</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=ateuber" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/mi096684"><img src="https://avatars3.githubusercontent.com/u/22032932?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mi096684</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Ami096684" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/devajithvs"><img src="https://avatars1.githubusercontent.com/u/29475282?v=4?s=100" width="100px;" alt=""/><br /><sub><b>devajithvs</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=devajithvs" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/zakaryan2004"><img src="https://avatars3.githubusercontent.com/u/29994884?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Geg Zakaryan</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=zakaryan2004" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Azakaryan2004" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://www.hakanbogan.com"><img src="https://avatars1.githubusercontent.com/u/24498747?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hakan Boğan</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Aredrussianarmy" title="Bug reports">🐛</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/NicKoehler"><img src="https://avatars3.githubusercontent.com/u/53040044?v=4" width="100px;" alt=""/><br /><sub><b>NicKoehler</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3ANicKoehler" title="Bug reports">🐛</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=NicKoehler" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/chris4540"><img src="https://avatars1.githubusercontent.com/u/12794588?v=4" width="100px;" alt=""/><br /><sub><b>ChrisLin</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Achris4540" title="Bug reports">🐛</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=chris4540" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/NicKoehler"><img src="https://avatars3.githubusercontent.com/u/53040044?v=4?s=100" width="100px;" alt=""/><br /><sub><b>NicKoehler</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3ANicKoehler" title="Bug reports">🐛</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=NicKoehler" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/chris4540"><img src="https://avatars1.githubusercontent.com/u/12794588?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ChrisLin</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Achris4540" title="Bug reports">🐛</a> <a href="https://github.com/bisoncorps/search-engine-parser/commits?author=chris4540" title="Code">💻</a></td>
+    <td align="center"><a href="http://pete.world"><img src="https://avatars.githubusercontent.com/u/10454135?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Pietro</b></sub></a><br /><a href="https://github.com/bisoncorps/search-engine-parser/commits?author=pgrandinetti" title="Code">💻</a> <a href="https://github.com/bisoncorps/search-engine-parser/issues?q=author%3Apgrandinetti" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
