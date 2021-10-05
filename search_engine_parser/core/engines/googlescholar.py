@@ -53,20 +53,20 @@ class Search(BaseSearch):
         if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
             desc = single_result.find('div', class_='gs_rs')
             if desc:
-                desc = desc.text
+                desc = desc.get_text()
             else:
                 desc = ''
             rdict["descriptions"] = desc
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
-            title = r_elem.text
+            title = r_elem.get_text()
             title = re.sub(r'^[\[\w+\]]+ ', '', title)
             rdict["titles"] = title
 
         if return_type == ReturnType.FULL:
             t_elem = single_result.find('span', class_='gs_ct1')
             if t_elem:
-                result_type = t_elem.text
+                result_type = t_elem.get_text()
             else:
                 result_type = ''
 

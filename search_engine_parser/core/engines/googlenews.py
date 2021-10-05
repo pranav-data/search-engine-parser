@@ -45,7 +45,7 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
             title_tag = single_result.find('h3')
-            title = title_tag.text
+            title = title_tag.get_text()
             rdict["titles"] = title
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
@@ -54,7 +54,7 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
             desc_tag = single_result.find('div', class_='st')
-            rdict["descriptions"] = desc_tag.text
+            rdict["descriptions"] = desc_tag.get_text()
 
         if return_type in (ReturnType.FULL,):
             img_tag = single_result.find('img', class_='th')
@@ -62,6 +62,6 @@ class Search(BaseSearch):
             date_tag = single_result.find('span', class_='f')
 
             rdict["image_url"] = img_tag.get('src')
-            rdict["news_source"] = news_source_tag.text
-            rdict["date"] = date_tag.text
+            rdict["news_source"] = news_source_tag.get_text()
+            rdict["date"] = date_tag.get_text()
         return rdict

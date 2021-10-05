@@ -51,7 +51,7 @@ class Search(BaseSearch):
             h2 = single_result.find(
                 'h2', class_="result__title")  # pylint: disable=invalid-name
             # Get the text and link
-            rdict["titles"] = h2.text.strip()
+            rdict["titles"] = h2.get_text().strip()
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
             link = None
@@ -60,6 +60,6 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
             desc = single_result.find(class_='result__snippet')
-            rdict["descriptions"] = desc.text
+            rdict["descriptions"] = desc.get_text()
 
         return rdict

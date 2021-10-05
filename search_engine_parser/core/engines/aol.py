@@ -36,7 +36,7 @@ class Search(BaseSearch):
         link_tag = h3_tag.find('a')
         if return_type in (ReturnType.FULL, return_type.TITLE):
             # Get the text and link
-            rdict["titles"] = link_tag.text
+            rdict["titles"] = link_tag.get_text()
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
             rdict["links"] = link_tag.get("href")
@@ -44,6 +44,6 @@ class Search(BaseSearch):
         if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
             caption = single_result.find('div', class_='compText aAbs')
             desc = caption.find('p', class_='lh-16')
-            rdict["descriptions"] = desc.text
+            rdict["descriptions"] = desc.get_text()
 
         return rdict

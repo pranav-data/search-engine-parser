@@ -46,13 +46,13 @@ class Search(BaseSearch):
 
         rdict = SearchItem()
         if return_type in (ReturnType.FULL, return_type.TITLE):
-            rdict["titles"] = single_result.find('a').text
+            rdict["titles"] = single_result.find('a').get_text()
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
             rdict["links"] = single_result.a["href"]
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
             rdict["descriptions"] = single_result.find(
-                'p', class_="PartialSearchResults-item-abstract").text
+                'p', class_="PartialSearchResults-item-abstract").get_text()
 
         return rdict

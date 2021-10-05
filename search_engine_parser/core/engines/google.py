@@ -74,10 +74,10 @@ class Search(BaseSearch):
         if return_type in (ReturnType.FULL, ReturnType.TITLE):
             link_tag = r_elem.find('a')
             if link_tag:
-                title = link_tag.find('h3').text
+                title = link_tag.find('h3').get_text()
             else:
                 r_elem = els[1]
-                title = r_elem.find('div', class_='BNeawe').text
+                title = r_elem.find('div', class_='BNeawe').get_text()
             results['titles'] = title
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
@@ -99,7 +99,7 @@ class Search(BaseSearch):
                     raw_url = urljoin(self.base_url, raw_link)
                     results['raw_urls'] = raw_url
                     results['links'] = self.clean_url(raw_url)
-            desc = desc_tag.text
+            desc = desc_tag.get_text()
             results['descriptions'] = desc
         return results
 

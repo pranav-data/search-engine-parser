@@ -45,7 +45,7 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
             # Get the text and link
-            rdict["titles"] = title_tag.text
+            rdict["titles"] = title_tag.get_text()
 
         # try for single videos
         try:
@@ -56,19 +56,19 @@ class Search(BaseSearch):
 
             if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
                 desc = single_result.find(
-                    'div', class_="yt-lockup-description").text
+                    'div', class_="yt-lockup-description").get_text()
                 rdict["descriptions"] = desc
 
             if return_type in (ReturnType.FULL, ):
                 duration = single_result.find(
-                    'span', class_='accessible-description').text
+                    'span', class_='accessible-description').get_text()
                 ul_tag = single_result.find('ul', class_='yt-lockup-meta-info')
 
                 channel_name = single_result.find(
-                    'a', class_='yt-uix-sessionlink spf-link').text
+                    'a', class_='yt-uix-sessionlink spf-link').get_text()
                 views_and_upload_date = ul_tag.find_all('li')
-                upload_date = views_and_upload_date[0].text
-                views = views_and_upload_date[1].text
+                upload_date = views_and_upload_date[0].get_text()
+                views = views_and_upload_date[1].get_text()
                 rdict.update({
                     "channels": channel_name,
                     "durations": duration,
@@ -84,14 +84,14 @@ class Search(BaseSearch):
                 if i.get("href").startswith("/playlist"):
                     ref_link = i.get("href")
                 elif i.get("href").startswith("/user"):
-                    channel_name = i.text
+                    channel_name = i.get_text()
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 link = self.base_url + ref_link
                 rdict["links"] = link
 
             if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
                 desc = single_result.find(
-                    'span', class_='accessible-description').text
+                    'span', class_='accessible-description').get_text()
                 rdict["descriptions"] = desc
             if return_type in (ReturnType.FULL,):
                 rdict.update({

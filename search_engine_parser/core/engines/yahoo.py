@@ -45,7 +45,7 @@ class Search(BaseSearch):
         h3_tag = single_result.find('h3', class_='title')
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
-            title = h3_tag.text
+            title = h3_tag.get_text()
             rdict["titles"] = title
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
@@ -58,6 +58,6 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
             desc = single_result.find('p', class_='fz-ms')
-            rdict["descriptions"] = desc.text
+            rdict["descriptions"] = desc.get_text()
 
         return rdict

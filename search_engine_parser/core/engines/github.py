@@ -81,7 +81,7 @@ class Search(BaseSearch):
             link_tag = h3.find('a')
             # Get the text and link
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
-                title = link_tag.text
+                title = link_tag.get_text()
                 rdict["titles"] = title
 
             if return_type in (ReturnType.FULL, ReturnType.LINK):
@@ -102,15 +102,15 @@ class Search(BaseSearch):
                     'a')
                 updated_on = single_result.find("relative-time").get("title")
                 rdict.update({
-                    "stars": "" if not stars else stars.text.strip(),
-                    "languages": lang.text if lang else "",
+                    "stars": "" if not stars else stars.get_text().strip(),
+                    "languages": lang.get_text() if lang else "",
                     "updated_on": updated_on,
                 })
 
         if self.type == "Users":
             title_tag = single_result.find('div', class_='f4')
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
-                title = title_tag.text
+                title = title_tag.get_text()
                 rdict["titles"] = title
 
             if return_type in (ReturnType.FULL, ReturnType.LINK):
@@ -122,7 +122,7 @@ class Search(BaseSearch):
                 desc_tag = single_result.find('p', class_='mb-1')
                 desc = None
                 if desc_tag:
-                    desc = desc_tag.text.strip(' \n')
+                    desc = desc_tag.get_text().strip(' \n')
                 rdict["descriptions"] = desc
 
             if return_type in (ReturnType.FULL, ):
@@ -132,9 +132,9 @@ class Search(BaseSearch):
                 location = email = None
                 for single in location_and_email:
                     if single.get('href') == None:
-                        location = single.text.strip(' \n')
+                        location = single.get_text().strip(' \n')
                     else:
-                        email = single.text
+                        email = single.get_text()
 
                 rdict.update({
                     "locations": location,
@@ -154,13 +154,13 @@ class Search(BaseSearch):
                 rdict["links"] = link
 
             if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
-                desc = single_result.find('p', class_="mb1").text
+                desc = single_result.find('p', class_="mb1").get_text()
                 rdict["descriptions"] = desc
 
             if return_type in (ReturnType.FULL, ):
                 last_updated = single_result.find(
                     'relative-time').get('title')
-                repository = single_result.find('a', class_='muted-link').text
+                repository = single_result.find('a', class_='muted-link').get_text()
                 rdict.update({
                     "repositories": repository,
                     "last_updated": last_updated,
@@ -170,7 +170,7 @@ class Search(BaseSearch):
             title_div = single_result.find('div', class_='f4')
             title_tag = title_div.find('a', class_=None)
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
-                rdict["titles"] = title_tag.text
+                rdict["titles"] = title_tag.get_text()
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 ref_link = title_tag.get('href')
                 link = self.base_url + ref_link
@@ -179,14 +179,14 @@ class Search(BaseSearch):
                 desc = None
                 desc_tag = single_result.find('p', class_=None)
                 if desc_tag:
-                    desc = desc_tag.text
+                    desc = desc_tag.get_text()
                 rdict["descriptions"] = desc
 
         if self.type == "Marketplace":
             title_tag = single_result.find('a', class_='no-underline')
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
                 title = title_tag.get('title')
-                rdict["titles"] = title_tag.text
+                rdict["titles"] = title_tag.get_text()
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 link = title_tag.get('href')
                 rdict["links"] = link
@@ -195,7 +195,7 @@ class Search(BaseSearch):
                 desc = None
                 desc_tag = single_result.find('text-gray')
                 if desc_tag:
-                    desc = desc_tag.text
+                    desc = desc_tag.get_text()
                 rdict["descriptions"] = desc
 
             if return_type in (ReturnType.FULL, ):
@@ -209,8 +209,8 @@ class Search(BaseSearch):
         if self.type == "RegistryPackages":
             title_tag = single_result.find('a', class_='h4')
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
-                title = title_tag.text
-                rdict["titles"] = title_tag.text
+                title = title_tag.get_text()
+                rdict["titles"] = title_tag.get_text()
 
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 ref_link = title_tag.get('href')
@@ -219,14 +219,14 @@ class Search(BaseSearch):
 
             if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
                 desc = single_result.find(
-                    'p', class_='mb-1').text.strip('\n ')
+                    'p', class_='mb-1').get_text().strip('\n ')
                 rdict["descriptions"] = desc
 
         if self.type == "Issues":
             title_tag = single_result.find('a', class_=None)
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
-                title = title_tag.text
-                rdict["titles"] = title_tag.text
+                title = title_tag.get_text()
+                rdict["titles"] = title_tag.get_text()
 
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 ref_link = title_tag.get('href')
@@ -234,12 +234,12 @@ class Search(BaseSearch):
                 rdict["links"] = link
 
             if return_type in (ReturnType.FULL, ReturnType.DESCRIPTION):
-                desc = single_result.find('p', class_='mb-0').text
+                desc = single_result.find('p', class_='mb-0').get_text()
                 rdict["descriptions"] = desc
 
             if return_type in (ReturnType.FULL, ):
                 repository = single_result.find(
-                    'div', class_='ml-1').find('a', 'text-bold').text
+                    'div', class_='ml-1').find('a', 'text-bold').get_text()
                 opened_by = self.base_url + \
                     single_result.find(
                         'div', class_='mr-3').find('a').get('href')
@@ -256,7 +256,7 @@ class Search(BaseSearch):
 
             if return_type in (ReturnType.FULL, ReturnType.TITLE):
                 title = title_tag.get('aria-label').strip("\n ")
-                rdict["titles"] = title_tag.text
+                rdict["titles"] = title_tag.get_text()
 
             if return_type in (ReturnType.FULL, ReturnType.LINK):
                 ref_link = title_tag.get('href')
@@ -276,9 +276,9 @@ class Search(BaseSearch):
                 if single_result.find('a', class_='commit-author'):
                     author_tag = single_result.find(
                         'a', class_='commit-author')
-                    author = author_tag.text
+                    author = author_tag.get_text()
                     div = single_result.find('div', class_='d-flex')
-                    repo = div.find('a').text
+                    repo = div.find('a').get_text()
                     desc = "Committed to {}".format(repo)
                 rdict["descriptions"] = desc
                 if return_type == ReturnType.FULL:

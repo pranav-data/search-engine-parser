@@ -45,7 +45,7 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
             # Get the text and link
-            title = h3_tag.text
+            title = h3_tag.get_text()
             # Handle read more type texts
             index = title.find("Read more")
             if index >= 0:
@@ -59,6 +59,6 @@ class Search(BaseSearch):
 
         if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
             desc = single_result.find('div', class_="organic__content-wrapper")
-            desc = desc.text
+            desc = desc.get_text()
             rdict["descriptions"] = desc
         return rdict

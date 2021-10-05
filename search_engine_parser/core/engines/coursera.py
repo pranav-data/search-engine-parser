@@ -45,25 +45,25 @@ class Search(BaseSearch):
             rdict["links"] = urljoin('https://www.coursera.org', link)
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
-            title = single_result.find('h2', class_="card-title").text
+            title = single_result.find('h2', class_="card-title").get_text()
             rdict["titles"] = title
 
         if return_type in (ReturnType.FULL,):
             partner_elem = single_result.find('span', class_='partner-name')
             partner = ''
             if partner_elem:
-                partner = partner_elem.text
+                partner = partner_elem.get_text()
 
             rating_avg_elem = single_result.find('span', class_='ratings-text')
             rating_avg = None
             if rating_avg_elem:
-                rating_avg = float(rating_avg_elem.text)
+                rating_avg = float(rating_avg_elem.get_text())
 
             enrollment_elem = single_result.find('span', class_='enrollment-number')
             enrolment_number = None
 
             if enrollment_elem:
-                enr_cl_txt = enrollment_elem.text.lower().replace(',', '').replace('.', '')\
+                enr_cl_txt = enrollment_elem.get_text().lower().replace(',', '').replace('.', '')\
                         .replace('m', '0' * 6).replace('k', '0' * 3)
                 if enr_cl_txt.isdigit():
                     enrolment_number = int(enr_cl_txt)
@@ -71,13 +71,13 @@ class Search(BaseSearch):
             difficulty_elem = single_result.find('span', class_='difficulty')
             difficulty = ''
             if difficulty_elem:
-                difficulty = difficulty_elem.text
+                difficulty = difficulty_elem.get_text()
 
             rating_count_elem = single_result.find('span', class_='ratings-count')
             rating_count = None
             if rating_count_elem:
                 rating_count_elem = rating_count_elem.find('span')
-                rating_count_cl = rating_count_elem.text.replace(',', '')
+                rating_count_cl = rating_count_elem.get_text().replace(',', '')
                 if rating_count_cl.isdigit():
                     rating_count = int(rating_count_cl)
 

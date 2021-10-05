@@ -53,21 +53,21 @@ class Search(BaseSearch):
         link_tag = single_result.find('a', class_='fw-b')
 
         if return_type in (ReturnType.FULL, return_type.TITLE):
-            title = link_tag.find('strong').text
+            title = link_tag.find('strong').get_text()
             rdict["titles"] = title
 
         if return_type in (ReturnType.FULL, ReturnType.LINK):
             rdict["links"] = link_tag.get('href')
 
         if return_type in (ReturnType.FULL, return_type.DESCRIPTION):
-            desc = single_result.find('div', class_='pt4').text.strip()
+            desc = single_result.find('div', class_='pt4').get_text().strip()
             rdict["descriptions"] = desc
 
         if return_type == ReturnType.FULL:
             data = list(single_result.find_all('td', class_='ac'))
-            animetype = data[0].text.strip()
-            episodes = data[1].text.strip()
-            score = data[2].text.strip()
+            animetype = data[0].get_text().strip()
+            episodes = data[1].get_text().strip()
+            score = data[2].get_text().strip()
 
             rdict.update({
                 "episode_count": episodes,
